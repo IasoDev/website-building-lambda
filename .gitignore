@@ -1,0 +1,301 @@
+//*jslint es6:true*/
+// 1. Text strings =====================================================================================================
+//    Modify these strings and messages to change the behavior of your Lambda function
+
+const languageStrings = {
+    'en': {
+        'translation': {
+            'WELCOME' : "Welcome to Gloucester Guide!",
+            'HELP'    : "Say about, to hear more about the city, or say coffee, breakfast, lunch, or dinner, to hear local restaurant suggestions, or say recommend an attraction, or say, go outside. ",
+            'ABOUT'   : "Gloucester Massachusetts is a city on the Atlantic Ocean.  A popular summer beach destination, Gloucester has a rich history of fishing and ship building.",
+            'STOP'    : "Okay, see you next time!"
+        }
+    },
+    'de-DE': {
+        'translation' : {
+            'WELCOME'   : "Guten Morgen!",
+            'STOP'      : "Tschüss!",
+            'ABOUT'     : "Flo der Frosch ist ihr Assistent für Senioren um ihren Tag zu planen",
+            'HELP'      : "Sag Hallo Flo um eine Übersicht über Aktivitäten zu bekommen"
+        }
+    }
+};
+
+const events =
+    [
+    {"name" : "ein Klavierkonzert",
+        "time":"15 Uhr 30",
+        "location":"Groﬂem Raum"
+    },
+    {"name":"eine Gymnastikübung",
+        "time":"16 Uhr",
+        "location":"Fitnessraum"
+    }
+    ];
+
+const sayStrings = {
+    "Begruessung":[
+        "Guten Morgen. Ich hoffe du hast gut geschlafen. Möchtest du, dass ich dir den Plan für heute präsentiere?",
+        "Ich wünsche dir einen wunderschönen Guten Morgen. Soll ich dir erzählen, an welchen Aktivitäten du heute teilnehmen kannst?",
+        "Guten Morgen. Ich hoffe du hast gut geschlafen. Heute werden spannende Aktivitäten angeboten. Soll ich dir diese vorstellen?"
+        ],
+    "Wiederholung_Begruessung":[
+        "Du hast heute die Möglichkeit an einer Aktivität teil zu nehmen. Soll ich dir diese vorstellen?",
+        "Wenn du willst, kannst du heute bei einer Aktivität mitmachen. Möchtest du wissen, was heute Spannendes angeboten wird?",
+        "Ich möchte dir zeigen, was für spannende Aktivitäten heute auf dem Plan stehen. Soll ich sie vorstellen?"
+        ],
+    "Teilnahme_Fragen":[
+        "Möchtest du teilnehmen?",
+        "Möchtest du mitmachen?",
+        "Möchtest du da hingehen?",
+        "Soll ich dich anmelden?"
+        ],
+    "Teilnahme_Bestaetigung":[
+        "Ich habe dich eingetragen und werde dich später erinnern.",
+        "Du bist für die Veranstaltung angemeldet. Kurz davor werde ich dich noch einmal erinnern.",
+        "Ich habe dich angemeldet und werde dich vorher noch einmal daran erinnern."
+        ],
+    "FrageWeitereAktivitaet":[
+        "Es gibt noch ein weiteres Angebot. Soll ich dir dieses auch vorstellen?",
+        "Wir haben noch eine weitere Veranstaltung. Willst du hören, worum es sich handelt?",
+        "Du kannst auch noch an einer anderen Aktivität teilnehmen. Willst du wissen, was dich Spannendes erwarten könnte?"
+        ],
+    "Verabschiedung":[
+        "Ich wünsche dir einen guten Start in den Tag!"
+        ]
+};
+
+const SKILL_NAME = "Gloucester Guide";
+
+
+var stateModule = (function () {
+        var state; // Private Variable
+
+        var pub = {};// public object - returned at end of module
+
+        pub.changeState = function (newstate) {
+            state = newstate;
+        };
+
+        pub.getState = function() {
+            return state;
+        };
+
+        return pub; // expose externally
+    }());
+
+var eventIndex = (function () {
+        var state; // Private Variable
+
+        var pub = {};// public object - returned at end of module
+
+        pub.changeState = function (newstate) {
+            state = newstate;
+        };
+
+        pub.getState = function() {
+            return state;
+        };
+
+        return pub; // expose externally
+    }());
+var registeredEvents = (function () {
+        var rEvents = []; // Private Variable
+
+        var pub = {};// public object - returned at end of module
+
+        pub.addRegisteredEvent = function (eventIndex) {
+            rEvents.push(eventIndex);
+        };
+
+        pub.getRegisteredEvents = function() {
+            return rEvents;
+        };
+		
+		pub.clear = function() {
+			rEvents.length = 0;
+		};
+
+        return pub; // expose externally
+    }());
+
+var sayVar = (function () {
+        var array = []; // Private Variable
+
+        var pub = {};// public object - returned at end of module
+
+        pub.push = function (item) {
+            array.push(item);
+        };
+
+        pub.getAll = function() {
+            return array.join(" ");
+        };
+		
+		pub.clear = function() {
+			array.lenght = 0;
+		};
+
+        return pub; // expose externally
+    }());
+// 2. Skill Code =======================================================================================================
+
+const Alexa = require('alexa-sdk');
+
+exports.handler = function(event, context, callback) {
+    var alexa = Alexa.handler(event, context);
+
+    // alexa.appId = 'amzn1.echo-sdk-ams.app.1234';
+    ///alexa.dynamoDBTableName = 'YourTableName'; // creates new table for session.attributes
+    alexa.resources = languageStrings;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
+};
+
+const handlers = {
+     'LaunchRequest': function () {
+         stateModule.changeState("Begruessung");
+		 registeredEvents.clear();
+		 sayVar.clear();
+        var say = randomArrayElement(sayStrings.Begruessung);
+        this.response.speak(say).listen(say);
+        this.emit(':responseReady');
+    },
+
+    'AboutIntent': function () {
+        this.response.speak(this.t('ABOUT'));
+        this.emit(':responseReady');
+    },
+
+    'Wiederholung': function () {
+        //To-Do
+        this.response.speak(say).listen(say);
+        this.emit(':responseReady');
+    },
+    'RegisterSeniorToEvent': function () {
+		var indexEvent = eventIndex.getState();
+		registeredEvents.addRegisteredEvent(indexEvent);
+		var say = randomArrayElement(sayStrings.Teilnahme_Bestaetigung);
+		weitereAktivitaet(say,this);
+    },
+    'Aktivitaet_Nachfrage': function () {
+        //To-Do
+        this.response.speak(say).listen(say);
+        this.emit(':responseReady');
+    },
+    'PresentActivity': function () {
+        stateModule.changeState("PresentActivity");
+		var indexCurrentEvent = eventIndex.getState();
+        var say = "Heute um " + events[indexCurrentEvent].time + " findet " + events[indexCurrentEvent].name + " im " + events[indexCurrentEvent].location + " statt. " + randomArrayElement(sayStrings.Teilnahme_Fragen);
+        this.response.speak(say).listen(say);
+        this.emit(':responseReady');
+    },
+    'Aktivitaets_Uebersicht': function () {
+        this.emit('LaunchRequest');
+    },
+    'AMAZON.YesIntent': function () {
+        var theState = stateModule.getState();
+        switch (theState) {
+            case "Begruessung":
+			    eventIndex.changeState(0);
+                this.emit('PresentActivity');
+                break;
+            case "PresentActivity":
+				this.emit('RegisterSeniorToEvent');
+                break;
+            case "weitereAktivitaet":
+				//eventIndex.changeState(eventIndex.getState() + 1);
+                this.emit('PresentActivity');
+                break;
+            default:
+                this.emit('AMAZON.HelpIntent');
+        }
+    },
+
+
+    'AMAZON.NoIntent': function () {
+        var theState = stateModule.getState();
+        switch (theState) {
+            case "Begruessung":
+                this.emit('AMAZON.StopIntent');
+                break;
+            case "PresentActivity":
+                weitereAktivitaet("",this);
+                break;
+            case "weitereAktivitaet":
+                verabschiedung("",this);
+                break;
+            default:
+                this.emit('AMAZON.HelpIntent');
+        }
+    },
+    'AMAZON.HelpIntent': function () {
+        this.response.speak(this.t('HELP')).listen(this.t('HELP'));
+        this.emit(':responseReady');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.response.speak(this.t('STOP'));
+        this.emit(':responseReady');
+    },
+    'AMAZON.StopIntent': function () {
+        this.emit('SessionEndedRequest');
+    },
+    'SessionEndedRequest': function () {
+		var state = stateModule.getState();
+		// var say;
+		if (state == "Verabschiedung") {
+			say = sayVar.getAll();
+		}
+		else 
+			say = "";
+        this.response.speak(say + this.t('STOP'));
+        this.emit(':responseReady');
+    }
+
+};
+
+//    END of Intent Handlers {} ========================================================================================
+// 3. Helper Function  =================================================================================================
+
+// function presentActivity(indexCurrentEvent) {
+    // eventIndex.changeState(indexCurrentEvent);
+    // stateModule.changeState("PresentActivity");
+    // var say = "Heute um" + events[indexCurrentEvent].time + "findet " + events[indexCurrentEvent].name + " am Ort" + events[indexCurrentEvent].location + "statt." + randomArrayElement(sayStrings.Teilnahme_Fragen);
+    // this.response.speak(say).listen(say);
+    // this.emit(':responseReady');
+// }
+
+// function registerSenior(indexEvent,ob) {
+    // registeredEvents.addRegisteredEvent(indexEvent);
+    // var say = randomArrayElement(sayStrings.Teilnahme_Bestaetigung);
+    // weitereAktivitaet(say,ob);
+// }
+
+function weitereAktivitaet(say,ob) {
+    stateModule.changeState("weitereAktivitaet");
+	var indexEvent = eventIndex.getState() + 1;
+	eventIndex.changeState(indexEvent);
+    if (indexEvent < events.length) {
+        say = say + " " + randomArrayElement(sayStrings.FrageWeitereAktivitaet);
+        ob.response.speak(say).listen(say);
+        ob.emit(':responseReady');
+    }
+    else {
+        verabschiedung(say,ob);
+    }
+}
+
+function verabschiedung(say,ob) {
+        say = say + " " + randomArrayElement(sayStrings.Verabschiedung);
+		stateModule.changeState("Verabschiedung");
+		sayVar.push(say);
+		//ob.response.speak(say);
+        //ob.emit(':responseReady');
+		ob.emit('SessionEndedRequest');
+}
+
+function randomArrayElement(array) {
+    var i = 0;
+    i = Math.floor(Math.random() * array.length);
+    return(array[i]);
+}

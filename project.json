@@ -1,0 +1,14 @@
+{
+  "name": "Iosa",
+  "description": "This is the Iosa skill",
+  "memory": 128,
+  "timeout": 5,
+  "role": "arn:aws:iam::199611815777:role/AlexaLambda",
+  "environment": {},
+  "runtime": "nodejs6.10",
+  "handler": "lib.default",
+  "hooks": {
+    "build": "gulp",
+    "clean": "rm -fr lib"
+  }
+}

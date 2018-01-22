@@ -1,0 +1,24 @@
+machine:
+  node:
+    version: 6
+  environment:
+    AWS_REGION: eu-west-1
+
+test:
+  override:
+    - echo "Tests are defined with Gulp"
+
+dependencies:
+  pre:
+    - curl -sL https://github.com/apex/apex/releases/download/v0.14.0/apex_linux_amd64 -o ~/apex
+    - chmod +x ~/apex
+
+deployment:
+  prod:
+    branch: master
+    commands:
+      - ~/apex deploy
+  dev:
+    branch: dev
+    commands:
+      - ~/apex deploy

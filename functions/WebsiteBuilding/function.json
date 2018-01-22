@@ -1,0 +1,8 @@
+{
+  "description": "Lambda function to react to changes in DynamoDB and update request list of website stored in S3",
+  "timeout": 10,
+  "memory": 128,
+  "environment": {
+    "LOGGLY_TOKEN": "9999999999"
+  }
+}
