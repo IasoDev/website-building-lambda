@@ -20,6 +20,19 @@ exports.handler = (event, context, callback) => {
         }
     };
     
-    dynamo.scan({ TableName: 'VoteTally', ConsistentRead: true }, writeResultsToS3);
+    //dynamo.scan({ TableName: 'VoteTally', ConsistentRead: true }, writeResultsToS3);
     
+	var params = {
+	 //ProjectionExpression: "mapAttr", //This can be used to just select specific keys
+	 TableName: "Requests"
+	};
+
+	dynamo.scan(params, function(err, data) {
+	  if (err) {
+		console.log("Error", err);
+	  } else {
+		console.log(JSON.stringify(data));
+		});
+	  }
+	});
 };
