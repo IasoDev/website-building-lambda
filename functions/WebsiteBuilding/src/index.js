@@ -30,9 +30,9 @@ exports.handler = (event, context, callback) => {
 	dynamo.scan(params, function(err, data) {
 	  if (err) {
 		console.log("Error", err);
-	  } else {
-		console.log(JSON.stringify(data));
-		});
 	  }
-	});
+	  else {
+		console.log(JSON.stringify(data));
+		}
+	  });
 };
