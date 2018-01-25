@@ -3,7 +3,7 @@
   "description": "This is the Iosa skill",
   "memory": 128,
   "timeout": 5,
-  "role": "arn:aws:iam::199611815777:role/AlexaLambda",
+  "role": " arn:aws:iam::199611815777:role/WebsiteBuildingLambda",
   "environment": {},
   "runtime": "nodejs6.10",
   "handler": "lib.default",
