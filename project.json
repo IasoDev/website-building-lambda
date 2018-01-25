@@ -3,10 +3,10 @@
   "description": "This is the Iosa skill",
   "memory": 128,
   "timeout": 5,
-  "role": " arn:aws:iam::199611815777:role/WebsiteBuildingLambda",
+  "role": "arn:aws:iam::199611815777:role/WebsiteBuildingLambda",
   "environment": {},
   "runtime": "nodejs6.10",
-  "handler": "lib.default",
+  "handler": "handler",
   "hooks": {
     "build": "gulp",
     "clean": "rm -fr lib"
