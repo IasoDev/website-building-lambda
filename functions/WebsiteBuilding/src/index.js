@@ -1,5 +1,5 @@
 var AWS = require("aws-sdk");
-var dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+var dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const s3 = new AWS.S3(); 
 
 export default function(event, context, callback){
@@ -19,5 +19,5 @@ export default function(event, context, callback){
 	 //ProjectionExpression: "mapAttr", //This can be used to just select specific keys
 	 TableName: "Requests"
 	};
-    dynamo.scan(params, writeResultsToS3);
+    dynamoDB.scan(params, writeResultsToS3);
 };
