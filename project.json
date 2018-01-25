@@ -6,7 +6,7 @@
   "role": "arn:aws:iam::199611815777:role/WebsiteBuildingLambda",
   "environment": {},
   "runtime": "nodejs6.10",
-  "handler": "index.js",
+  "handler": "lib.default",
   "hooks": {
     "build": "gulp",
     "clean": "rm -fr lib"

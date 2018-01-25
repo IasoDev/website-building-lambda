@@ -2,7 +2,7 @@ var AWS = require("aws-sdk");
 var dynamodb = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 const s3 = new AWS.S3(); 
 
-exports.handler = (event, context, callback) => {
+export default function(event, context, callback) => {
     console.log('Received event:', JSON.stringify(event, null, 2));
     
 /*     var writeResultsToS3 = (err, results) => {
