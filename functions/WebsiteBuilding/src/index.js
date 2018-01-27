@@ -14,8 +14,8 @@ export default function(event, context, callback){
 			var requestList = result.Items;
 			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
 			console.log(data);
-            //var params = {Bucket: 'notification-panel', Key: 'data.json', Body: JSON.stringify(requestList)};
-            //s3.upload(params, callback);
+            var params = {Bucket: 'notification-panel', Key: 'data.json', Body: JSON.stringify(requestList)};
+            s3.upload(params, callback);
         }
     }; 
     var params = {
