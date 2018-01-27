@@ -10,7 +10,9 @@ export default function(event, context, callback){
             console.log(err, err.stack);
             callback(err, 'There was an error');
         } else {
-			console.log(JSON.stringify(data.Items));
+			//var requestList = data.Items;
+			console.log(JSON.stringify(data));
+			
             //var params = {Bucket: 'notification-panel', Key: 'data.json', Body: JSON.stringify(data.Items)};
             //s3.upload(params, callback);
         }
