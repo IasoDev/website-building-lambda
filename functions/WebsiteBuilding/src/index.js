@@ -1,5 +1,6 @@
 var AWS = require("aws-sdk");
 var dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
+var attr = require('dynamodb-data-types').AttributeValue;
 const s3 = new AWS.S3(); 
 
 export default function(event, context, callback){
@@ -10,7 +11,8 @@ export default function(event, context, callback){
             console.log(err, err.stack);
             callback(err, 'There was an error');
         } else {
-			var convertedData = AWS.DynamoDB.Converter.unmarshall(data);
+			//var convertedData = AWS.DynamoDB.Converter.unmarshall(data);
+			var convertedData = attr.unwrap(data);			
 			console.log(JSON.stringify(result));
 			console.log(convertedData);
 			var requestList = result.Items;
