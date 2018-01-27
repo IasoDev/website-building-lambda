@@ -10,7 +10,9 @@ export default function(event, context, callback){
             console.log(err, err.stack);
             callback(err, 'There was an error');
         } else {
+			var convertedData = AWS.DynamoDB.Converter.unmarshall(data);
 			console.log(JSON.stringify(result));
+			console.log(convertedData);
 			var requestList = result.Items;
 			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
 			console.log(data);
