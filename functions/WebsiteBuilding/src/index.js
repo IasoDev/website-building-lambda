@@ -5,15 +5,16 @@ const s3 = new AWS.S3();
 export default function(event, context, callback){
     console.log('Received event:', JSON.stringify(event, null, 2));
 
-     var writeResultsToS3 = (err, data) => {
+     var writeResultsToS3 = (err, result) => {
         if ( err ) {
             console.log(err, err.stack);
             callback(err, 'There was an error');
         } else {
-			//var requestList = data.Items;
-			console.log(JSON.stringify(data));
-			
-            //var params = {Bucket: 'notification-panel', Key: 'data.json', Body: JSON.stringify(data.Items)};
+			console.log(JSON.stringify(result));
+			var requestList = result.Items;
+			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
+			console.log(data);
+            //var params = {Bucket: 'notification-panel', Key: 'data.json', Body: JSON.stringify(requestList)};
             //s3.upload(params, callback);
         }
     }; 
