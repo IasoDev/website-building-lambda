@@ -14,7 +14,7 @@ export default function(event, context, callback){
 			console.log(JSON.stringify(result));
 			var requestListRaw = result.Items;
 			var requestList;
-			for (i = 0; i < requestListRaw.length; i++) {
+			for (var i = 0; i < requestListRaw.length; i++) {
 				requestList.push(attr.unwrap(requestListRaw[i]));
 			}
 			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
