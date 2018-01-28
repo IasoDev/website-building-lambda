@@ -1,6 +1,6 @@
 var AWS = require("aws-sdk");
 var dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
-var dyanmodbDataTypes = require('dynamodb-data-types');
+var attr = require('dynamodb-data-types').AttributeValue;
 const s3 = new AWS.S3(); 
 
 export default function(event, context, callback){
@@ -10,13 +10,11 @@ export default function(event, context, callback){
         if ( err ) {
             console.log(err, err.stack);
             callback(err, 'There was an error');
-        } else {
-			//var convertedData = AWS.DynamoDB.Converter.unmarshall(data);
-			var attr = new dynamodbDataTypes.AttributeValue();
-			var convertedData = attr.unwrap(data);			
+        } else {	
 			console.log(JSON.stringify(result));
-			console.log(convertedData);
 			var requestList = result.Items;
+			var convertedSingleItem = attr.unwrap(requestList[0]);	
+			console.log(convertedSingleItem);
 			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
 			console.log(data);
             var params = {Bucket: 'notification-panel', Key: 'data.json', Body: data};
