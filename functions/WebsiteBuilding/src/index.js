@@ -17,7 +17,7 @@ export default function(event, context, callback){
 			for (var i = 0; i < requestListRaw.length; i++) {
 				requestList.push(attr.unwrap(requestListRaw[i]));
 			}
-			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
+			var data = "{\"Requests\":" + JSON.stringify(requestList) + "}";
 			console.log(data);
             var params = {Bucket: 'notification-panel', Key: 'data.json', Body: data};
             s3.upload(params, callback);
