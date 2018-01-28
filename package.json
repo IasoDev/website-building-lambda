@@ -24,6 +24,7 @@
   ],
   "devDependencies": {
     "alexa-sdk": "^1.0.6",
+	"dynamodb-data-types":"3.0.0",
     "babel-core": "^6.22.1",
     "babel-loader": "6.2.7",
     "babel-plugin-path-variable": "^1.0.0",
