@@ -13,7 +13,7 @@ export default function(event, context, callback){
         } else {	
 			console.log(JSON.stringify(result));
 			var requestListRaw = result.Items;
-			var requestList;
+			var requestList = [];
 			for (var i = 0; i < requestListRaw.length; i++) {
 				requestList.push(attr.unwrap(requestListRaw[i]));
 			}
