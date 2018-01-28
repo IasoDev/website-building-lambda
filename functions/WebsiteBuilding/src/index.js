@@ -12,9 +12,11 @@ export default function(event, context, callback){
             callback(err, 'There was an error');
         } else {	
 			console.log(JSON.stringify(result));
-			var requestList = result.Items;
-			var convertedSingleItem = attr.unwrap(requestList[0]);	
-			console.log(convertedSingleItem);
+			var requestListRaw = result.Items;
+			var requestList;
+			for (i = 0; i < requestListRaw.length; i++) {
+				requestList.push(attr.unwrap(requestListRaw[i]));
+			}
 			var data = "{'Requests':" + JSON.stringify(requestList) + "}";
 			console.log(data);
             var params = {Bucket: 'notification-panel', Key: 'data.json', Body: data};
