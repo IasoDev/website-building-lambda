@@ -29,8 +29,8 @@ export default function(event, context, callback){
 				console.log(requestIdSplitted);
 				console.log(userId);
 				console.log(user);
-				itemUnwrapped.room = user["room"];
-				itemUnwrwapped.name = user["name"];
+				itemUnwrapped["room"] = user.room;
+				itemUnwrwapped["name"] = user.name;
 				requestList.push(itemUnwrapped);
 			}
 			var data = "{\"Requests\":" + JSON.stringify(requestList) + "}";
