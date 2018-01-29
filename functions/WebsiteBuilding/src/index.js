@@ -25,8 +25,9 @@ export default function(event, context, callback){
 				var requestIdSplitted = itemUnwrapped.requestId.split(".");
 				var userId = requestIdSplitted.splice(requestIdSplitted.length -1,1).join('');
 				var user = userIdPatientMap[userId];
-				itemUnwrapped.room = user.room;
-				itemUnwrwapped.name = user.name;
+				console.log(user);
+				itemUnwrapped.room = user["room"];
+				itemUnwrwapped.name = user["name"];
 				requestList.push(itemUnwrapped);
 			}
 			var data = "{\"Requests\":" + JSON.stringify(requestList) + "}";
