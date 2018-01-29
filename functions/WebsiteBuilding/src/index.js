@@ -24,7 +24,7 @@ export default function(event, context, callback){
 				var itemUnwrapped = attr.unwrap(requestListRaw[i]);
 				var requestIdSplitted = itemUnwrapped.requestId.split(".");
 				requestIdSplitted.splice(requestIdSplitted.length -1,1);
-				var userId = requestIdSplitted.join('');
+				var userId = requestIdSplitted.join('.');
 				var user = userIdPatientMap[userId];
 				console.log(requestIdSplitted);
 				console.log(userId);
