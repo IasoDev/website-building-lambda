@@ -21,7 +21,7 @@ export default function(event, context, callback){
 			var requestListRaw = result.Items;
 			var requestList = [];
 			for (var i = 0; i < requestListRaw.length; i++) {
-				var itemUnwrapped = JSON.parse(JSON.stringify(attr.unwrap(requestListRaw[i])));
+				var itemUnwrapped = attr.unwrap(requestListRaw[i]);
 				var requestIdSplitted = itemUnwrapped.requestId.split(".");
 				requestIdSplitted.splice(requestIdSplitted.length -1,1);
 				var userId = requestIdSplitted.join('.');
@@ -31,7 +31,7 @@ export default function(event, context, callback){
 				console.log(user);
 				console.log(itemUnwrapped);
 				itemUnwrapped["room"] = user.room;
-				itemUnwrwapped["name"] = user.name;
+				itemUnwrapped["name"] = user.name;
 				requestList.push(itemUnwrapped);
 			}
 			var data = "{\"Requests\":" + JSON.stringify(requestList) + "}";
