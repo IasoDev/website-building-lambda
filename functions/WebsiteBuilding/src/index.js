@@ -23,7 +23,7 @@ export default function(event, context, callback){
 			for (var i = 0; i < requestListRaw.length; i++) {
 				var itemUnwrapped = attr.unwrap(requestListRaw[i]);
 				var requestIdSplitted = itemUnwrapped.requestId.split(".");
-				userId = requestIdSplitted.splice(requestIdSplitted.length -1,1).join('');
+				var userId = requestIdSplitted.splice(requestIdSplitted.length -1,1).join('');
 				var user = userIdPatientMap[userId];
 				itemUnwrapped.room = user.room;
 				itemUnwrwapped.name = user.name;
