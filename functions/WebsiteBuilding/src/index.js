@@ -29,6 +29,7 @@ export default function(event, context, callback){
 				console.log(requestIdSplitted);
 				console.log(userId);
 				console.log(user);
+				console.log(itemUnwrapped);
 				itemUnwrapped["room"] = user.room;
 				itemUnwrwapped["name"] = user.name;
 				requestList.push(itemUnwrapped);
