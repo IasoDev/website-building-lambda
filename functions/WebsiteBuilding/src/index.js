@@ -1,7 +1,10 @@
+//Author: Valentin Schrader (v.schrader@tum.de)
+
 var AWS = require("aws-sdk");
 var dynamoDB = new AWS.DynamoDB({apiVersion: '2012-08-10'});
 var attr = require('dynamodb-data-types').AttributeValue;
-const s3 = new AWS.S3(); 
+const s3 = new AWS.S3();
+ 
 var userIdPatientMap = {
 "amzn1.ask.account.AGE32LURM75ARCMWXHNLEWGHD5WQ7BS4TQQN2FSGVNTRO43XT22R2THH5EH5RRDFJSS5PS4AM7HAKUAYLBVI3AMAGXABCALSTTUH635ANFL545DZFV76DEVFHDY3V6LBMQIC3DM5NS5XHYIPZ6FHI35QW6QPDXPHITXVK65UNTAT7JIPADYCLMNBM7YNC7I6IZBPTTOM4Q5VJTA":{
 	name: "Herr Heinrich",
@@ -26,10 +29,7 @@ export default function(event, context, callback){
 				requestIdSplitted.splice(requestIdSplitted.length -1,1);
 				var userId = requestIdSplitted.join('.');
 				var user = userIdPatientMap[userId];
-				console.log(requestIdSplitted);
-				console.log(userId);
 				console.log(user);
-				console.log(itemUnwrapped);
 				itemUnwrapped["room"] = user.room;
 				itemUnwrapped["name"] = user.name;
 				requestList.push(itemUnwrapped);
@@ -41,7 +41,6 @@ export default function(event, context, callback){
         }
     }; 
     var params = {
-	 //ProjectionExpression: "mapAttr", //This can be used to just select specific keys
 	 TableName: "Requests"
 	};
     dynamoDB.scan(params, writeResultsToS3);
